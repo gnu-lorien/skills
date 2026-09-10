@@ -1,5 +1,5 @@
 ---
-name: implement-spec
+name: implement-spec-serial
 description: "Implement a specification in code."
 disable-model-invocation: true
 ---
