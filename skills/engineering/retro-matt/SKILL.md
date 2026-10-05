@@ -1,5 +1,5 @@
 ---
-name: retro
+name: retro-matt
 description: "Conduct a retrospective on a coding session."
 disable-model-invocation: true
 ---

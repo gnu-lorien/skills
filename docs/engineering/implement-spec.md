@@ -80,7 +80,7 @@ A worktree holds only what git tracks. Tests that read gitignored fixtures, loca
 `implement-spec` is the build step of the main chain, as the parallel alternative to running [implement](https://aihero.dev/skills-implement) once per ticket:
 
 ```txt
-grill-with-docs → to-spec → to-tickets → implement-spec → retro
+grill-with-docs → to-spec → to-tickets → implement-spec → retro-matt
 ```
 
 Its neighbours are [to-tickets](https://aihero.dev/skills-to-tickets), which declares the blocking edges it reads as a task graph, and [code-review](https://aihero.dev/skills-code-review), which it runs over the integration branch before closing out. [ask-matt](https://aihero.dev/skills-ask-matt) is the router over the whole set when you are not sure which flow you are in.

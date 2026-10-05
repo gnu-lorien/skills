@@ -1,5 +1,5 @@
 interface:
-  display_name: "Retro"
+  display_name: "Retro Matt"
   short_description: "Conduct a retrospective on a coding session."
 policy:
   allow_implicit_invocation: false
