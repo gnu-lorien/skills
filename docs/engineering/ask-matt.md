@@ -48,6 +48,14 @@ People often get two of these wrong, which is why the router gives the order and
 
 ## Common questions
 
+**Who checks live model availability?**
+
+[implement-spec](https://aihero.dev/skills-implement-spec)'s coordinator probes the required model/effort combinations in the active harness before creating a branch, then runs the evidence checker. [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) checks the default and review-fix profiles after generation. Each harness is verified in its own client; missing runtime settings leave verification pending.
+
+**Where do I configure models and effort for parallel implementation?**
+
+Use [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) to configure project execution profiles and supporting Claude Code/Codex agents. [to-tickets](https://aihero.dev/skills-to-tickets) includes the proposed profile in each ticket; [implement-spec](https://aihero.dev/skills-implement-spec) resolves the active harness's model and effort before dispatch. Explicit provider-specific overrides stay explicit instead of being translated across providers.
+
 **Isn't there just a list of the skills in the right order?**
 
 People keep asking for one in the README. This skill is that list. A static table would say `wayfinder → to-spec → to-tickets → implement → code-review → retro-matt` and be wrong for most situations. The important parts are the branches: is there a codebase, does the build span sessions, can talking settle this question. The cost is that the router is maintained by hand, so it lags behind the repo. `/grilling` shipped long before the router named it.

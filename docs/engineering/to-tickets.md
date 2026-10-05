@@ -55,6 +55,10 @@ Where even the batches can't stay green alone, they share an integration branch 
 
 ## Common questions
 
+**How do tickets select a model when I use both Claude Code and Codex?**
+
+When the project has execution profiles, the breakdown includes a proposed profile per ticket for you to approve. Published tickets carry an Execution section and matching `execution:<profile>` labels where supported. Each harness uses its own model and effort for that profile. Explicit model/effort choices remain overrides, and provider-specific overrides are flagged when another configured harness cannot run them. Without execution configuration, ticket formatting stays as before. [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) configures profiles; [implement-spec](https://aihero.dev/skills-implement-spec) resolves them before dispatch.
+
 **It produced twelve tickets for a three-line change.**
 Over-decomposition is the most reported problem with this skill, and many users see it. The [model](https://www.aihero.dev/ai-coding-dictionary/model) defaults to atomic units and loses the grouping that would make them meaningful. The quiz step is where you fix this. Ask it to merge tickets, and it will. There is also a lower limit. If the whole change fits in one context window, you don't need this skill at all. Go straight to [implement](https://aihero.dev/skills-implement).
 

@@ -18,25 +18,21 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 ## Steps
 
-1. Read the spec and tickets to understand the task graph.
+1. Read the spec and tickets to understand the task graph. Follow [Dispatch](references/dispatch.md) to resolve every ticket's execution profile or explicit model/effort overrides and the review-fix profile. For configured dispatch, run its harmless runtime probes and require the helper's `preflight` command to pass with current-session evidence before creating a branch. Missing observed model or effort blocks this check.
 
 2. (optional) Use an **exploration subagent** to conduct any exploration required by the tickets - relevant codebase files or external documentation. Ensure the exploration subagent can save files - it should save its markdown notes in a directory outside the repo, accessible by all future subagents. This lets **implementer subagents** focus on implementation rather than exploration.
 
 3. Create the integration branch. If the issue tracker closes work through PRs, or the user asks for one, open a draft PR after the first merge in step 5 (a branch with no commits ahead of main can't open one), marked as closing the spec and tickets.
 
-4. Use **implementer subagents** to implement each ticket, each in its own worktree on its own branch. Each implementer subagent:
-   - confirms its worktree is based on the integration branch before starting, and resets onto it if not;
-   - calls the Skill tool with `tdd` to build the ticket;
-   - merges the integration branch tip into its own branch before reporting done;
-   - verifies its work using the **Verification** scope below and reports the commands run, their results, and any criteria deferred to the integration gate.
+4. Use **implementer subagents** to implement each ticket, each in its own worktree on its own branch. Dispatch through the active harness's adapter with the resolved model and effort. Supply pointers to the ticket, spec, integration branch, and [implementer contract](references/implementer.md). The contract governs TDD, branch synchronization, focused verification, and reporting.
 
-5. Once an **implementer subagent** completes, merge its work to the integration branch with a **merger subagent**. The merger runs the repo's typecheck, if available, on the merged result and resolves failures before dependent tickets start.
+5. Once an **implementer subagent** completes, record requested and observed model/effort from available runtime metadata as described in Dispatch. Stop on a known mismatch; mark unavailable observations unknown. Merge its work to the integration branch with a **merger subagent**. The merger runs the repo's typecheck, if available, on the merged result and resolves failures before dependent tickets start.
 
 6. If this changes the **frontier** of available tickets, kick off more **implementer subagents** to work on the new tickets. This allows for maximum concurrency.
 
-7. Once all tickets are complete, call the Skill tool with `code-review` on the integration branch. Fix all issues raised by the code review in a single **implementer subagent**.
+7. Once all tickets are complete, invoke the installed `code-review` skill on the integration branch. Fix all issues raised by the code review in a single **implementer subagent** using the configured review-fix profile and shared contract.
 
-8. Run the **integration gate**: the repo's full test suite on the integration branch after all tickets and review fixes have landed. This discharges every ticket's deferred "full suite is green" criterion. On failure, use a single **implementer subagent** to fix it and re-run the failing tests, then run the gate again. Proceed only when it passes; if verification is blocked, report the blocker and leave completion pending.
+8. Run the **integration gate**: the repo's full test suite on the integration branch after all tickets and review fixes have landed. This discharges every ticket's deferred "full suite is green" criterion. On failure, use a single **implementer subagent** with the review-fix profile and shared contract to fix it and re-run the failing tests, then run the gate again. Proceed only when it passes; if verification is blocked, report the blocker and leave completion pending.
 
 9. If a draft PR exists, mark it ready for review. Otherwise, resolve each ticket the way the issue tracker closes work, and report the integration branch.
 
@@ -44,6 +40,6 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 ## Verification
 
-Each ticket's branch is provisional until the remaining tickets merge. Implementers run the repo's typecheck, if available, and the test files they create or edit. A ticket that requires broader testing before its dependents proceed gets that testing before it lands. Report a "full suite is green" criterion as **deferred to the integration gate**, rather than satisfied by focused tests.
+Each ticket's branch is provisional until the remaining tickets merge. The implementer contract sets ticket verification scope and reports full-suite criteria as **deferred to the integration gate**.
 
 The integration gate runs the full suite on the combined result, once after review fixes and again only if a failure requires changes. Use the repo's documented verification commands and ensure required fixtures and services are available; skipped required tests leave verification pending.

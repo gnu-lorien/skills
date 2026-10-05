@@ -92,4 +92,6 @@ Off the main flow entirely.
 
 ## Precondition
 
-**`/setup-matt-pocock-skills`**: run before your first engineering flow to configure the issue tracker, triage labels, and doc layout the other skills assume. Custom issue trackers also work.
+Configured `/implement-spec` dispatch includes a runtime preflight: harmless probes of the required model/effort combinations and an evidence check before branch creation. Missing runtime observations block configured dispatch; setup only verifies the harness it is running in.
+
+**`/setup-matt-pocock-skills`**: run before your first engineering flow to configure the issue tracker, triage labels, and doc layout the other skills assume. Custom issue trackers also work. For `/implement-spec` model dispatch, it also configures execution profiles and generates Claude Code/Codex implementer agents. `/to-tickets` proposes profiles per ticket; `/implement-spec` resolves them and explicit model/effort overrides before starting, with a separate review-fix profile for final fixes.

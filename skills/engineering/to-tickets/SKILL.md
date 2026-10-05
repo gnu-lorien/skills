@@ -37,6 +37,8 @@ Break the work into **tracer bullet** tickets.
 
 Give each ticket its **blocking edges**: the other tickets that must complete before it can start. A ticket with no blockers can start immediately.
 
+If `docs/agents/execution.json` exists, read its execution profiles and propose one for each ticket. Use the default profile unless the ticket warrants another configured profile. Preserve model/effort choices explicitly requested by the user. Include the proposed profile or overrides in the breakdown for approval; do not invent model rankings across providers. Without execution configuration, keep the existing ticket format.
+
 **Wide refactors are the exception to vertical slicing.** A **wide refactor** is one mechanical change (rename a column, retype a shared symbol) whose **blast radius** fans across the whole codebase, so a single edit breaks thousands of call sites at once and no vertical slice can land green. Don't force it into a tracer bullet; sequence it as **expand–contract**. First expand: add the new form beside the old so nothing breaks. Then migrate the call sites over in batches sized by blast radius (per package, per directory), each batch its own ticket blocked by the expand, keeping CI green batch to batch because the old form still exists. Finally contract: delete the old form once no caller remains, in a ticket blocked by every migrate batch. When even the batches can't stay green alone, keep the sequence but let them share an integration branch that all block a final integrate-and-verify ticket; green is promised only there.
 
 ### 4. Quiz the user
@@ -63,6 +65,8 @@ Publish the approved tickets. **How** depends on the tracker `/setup-matt-pocock
 - **A real issue tracker (GitHub, Linear, …)** → publish one issue per ticket in dependency order (blockers first) so each ticket's blocking edges can reference real identifiers. Use the platform's native blocking / sub-issue relationship where it has one; otherwise set each ticket's "Blocked by" to the blocking issues. Apply the `ready-for-agent` triage label unless instructed otherwise; the tickets are agent-grabbable by construction.
 
 Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom.
+
+For configured execution, add `## Execution` with `Profile: <name>` to each ticket body and apply `execution:<name>` on a tracker that supports labels. Explicit user overrides use `Model: <configured model or alias>` and `Effort: <value>` in that section and matching `model:*`/`effort:*` labels. Body and labels must agree. Resolve choices for each configured harness using the installed `implement-spec` skill's `scripts/dispatch.py`; flag provider-specific overrides that cannot run in another harness. Create missing execution labels through the configured tracker workflow, or report the missing labels before publishing.
 
 Do NOT close or modify any parent issue.
 

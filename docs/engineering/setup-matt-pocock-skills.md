@@ -1,6 +1,6 @@
 ## What it does
 
-`setup-matt-pocock-skills` answers three questions about one repo: where issues live, what the triage labels are called, and where the domain docs sit. It records the answers as markdown files under `docs/agents/`.
+`setup-matt-pocock-skills` configures where issues live, what triage labels are called, where domain docs sit, and optional execution profiles for parallel implementation. It records the answers under `docs/agents/` and generates supporting agents when model dispatch is configured.
 
 Those files are the only thing that varies between repos. The skills themselves are identical everywhere. They read `docs/agents/issue-tracker.md` at run time and do what it says. That is why the set is not tied to GitHub, and why you never edit a skill file to point it at another tracker. Invoking it with "link the skills to a custom issue tracker" works with anything you can connect to programmatically, with no changes to the skills.
 
@@ -21,11 +21,13 @@ It writes into the repo you run it in:
 | `issue-tracker.md` | `docs/agents/` |
 | `domain.md` | `docs/agents/` |
 | `triage-labels.md` | `docs/agents/`, only when the `triage` skill is installed |
+| `execution.json`, shared implementer contract, and ownership manifest | `docs/agents/`, when execution profiles are configured |
+| Native implementer definitions | `.claude/agents/` and/or `.codex/agents/`, for configured harnesses |
 | An `## Agent skills` block | whichever of `CLAUDE.md` or `AGENTS.md` already exists |
 
-You commit all of it as markdown. There is no user-level or global mode. The config lives in the repo, so every repo gets its own copy.
+Commit the configuration and generated agents together. There is no user-level or global mode. The config lives in the repo, so every repo gets its own copy.
 
-## The three decisions
+## The configuration decisions
 
 It starts each section with the recommended answer, and skips any question its exploration already answered. Most runs need only two confirmations.
 
@@ -34,6 +36,7 @@ It starts each section with the recommended answer, and skips any question its e
 | **Issue tracker** | the one matching your `git remote` | always, because this is the one real choice |
 | **Triage labels** | keep the five canonical names (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`) | only if the `triage` skill is installed |
 | **Domain docs** | single-context: one `GLOSSARY.md` plus `docs/adr/` at the root | only if it spots monorepo signals, and then it offers a multi-context `GLOSSARY-MAP.md` |
+| **Execution profiles** | project choices for models, efforts, and the review-fix profile | when `implement-spec` is installed or model dispatch is requested |
 
 The tracker options:
 
@@ -49,6 +52,12 @@ The first three ship as templates in the skill and work out of the box. Local ma
 "Other" is a full option too. It is how Jira, Linear, Azure DevOps and Beads all work. You describe the workflow, the skill records your prose in `docs/agents/issue-tracker.md`, and the downstream skills follow the prose. Users have already built this: a Jira-over-[MCP](https://www.aihero.dev/ai-coding-dictionary/mcp) variant, a Gitea CLI shaped like `gh`, a hand-built local dashboard.
 
 ## Common questions
+
+**Does installing the skill also install its Claude Code and Codex agents?**
+
+No. Setup generates project-scoped native definitions from your approved execution profiles and copies a shared implementer contract into the project. It verifies model and effort support against the installed clients and account, preserves custom agents, and refuses to overwrite edited generated definitions. Updating profiles or the contract requires regeneration. New agent definitions may need a fresh client session before discovery. The generator validates configuration and writes files; it does not prove that a model is available to your account.
+
+After generation, setup runs no-edit probes for the default and review-fix profiles in the active client and checks captured runtime evidence with the preflight helper. A second configured harness remains unverified until checked in its own client. Missing discovery or effective-setting metadata leaves live verification pending. [implement-spec](https://aihero.dev/skills-implement-spec) repeats preflight for every combination its tickets need in each new session.
 
 **Do I have to use GitHub?**
 
@@ -71,7 +80,7 @@ It doesn't. `docs/agents/triage-labels.md` is a *mapping*: it tells `/triage` wh
 
 **Can I configure the other skills' behaviour here ([grilling](https://www.aihero.dev/ai-coding-dictionary/grilling) cadence, question format, tone)?**
 
-No. It configures three things: tracker, labels, doc layout. Users have asked to make it the place for per-user preferences. The answer is that skills stay opinionated and take no per-user config. Preferences belong in your `CLAUDE.md` as plain instructions, which every skill already reads.
+It configures tracker, labels, doc layout, and optional execution profiles. General preferences such as cadence, tone, or question format belong in your steering file. Execution profiles configure the runtime model and effort, while the shared implementation rules stay identical across harnesses.
 
 **Can I keep the config in `~/.claude` instead of committing it to every repo?**
 

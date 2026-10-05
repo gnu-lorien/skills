@@ -35,6 +35,21 @@ Implementers talk to the orchestrator through [context pointers](https://www.aih
 
 ## Common questions
 
+**Can I choose models and effort levels in both Claude Code and Codex?**
+
+Yes. Project execution profiles map the same ticket choice to a model and effort in each harness. [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) records these in `docs/agents/execution.json` and generates native agents plus one shared implementer contract. A ticket can use `execution:standard`, for example, while each harness uses its own configured model. Existing `model:*` and `effort:*` choices remain explicit overrides. Exact IDs stay exact; family aliases allow family selection. Unsupported choices are resolved before work starts, and review or gate fixes use a configured review-fix profile. Runtime observations are reported separately from requested settings; missing metadata is marked unknown.
+
+| Harness | Supporting agents | Dispatch control |
+| --- | --- | --- |
+| Claude Code | Effort-specific Markdown definitions in `.claude/agents/` | Native agent type sets effort; the invocation selects the model |
+| Codex | Model/effort-specific TOML definitions in `.codex/agents/` | Custom agent settings, or direct spawn overrides where the host exposes them |
+
+Installing the skill alone does not install these agents. Without execution configuration, unlabelled tickets retain inherited model and effort. GPT workers run natively in Codex and Claude workers in Claude Code; dispatching across providers requires a separate launcher. Generated files are refreshed during setup without overwriting user-owned or edited agents.
+
+**What actually checks that my account can run the selected model and effort?**
+
+The coordinator launches a no-edit probe for each model/effort combination needed by the tickets and review fixes, through the same dispatch path it will use for implementation. It records effective settings from runtime metadata and runs the helper's `preflight` command against that evidence. Pending probes, substitutions, missing observations, stale generated definitions, and evidence from a different session or configuration block the run before branch creation. Configuration validation and model menus alone do not pass this check. If the host cannot expose effective settings, it reports that limitation and leaves configured dispatch pending. The helper checks recorded evidence; the agent launches probes and captures the runtime records.
+
 **Does every implementer run the full test suite?**
 
 Each implementer runs typecheck where available and the test files it creates or edits. If a ticket requires broader testing before dependent tickets can start, it runs that too. A merger checks types on the combined branch before unblocking dependents. The full suite runs at the **integration gate**, after every ticket and review fix has landed, because that is the result you will ship. A ticket's full-suite criterion stays deferred until that gate passes. A failure gets focused fixes followed by another full-suite run; a blocked check or skipped required test keeps completion pending.
@@ -74,6 +89,7 @@ A worktree holds only what git tracks. Tests that read gitignored fixtures, loca
 ## It's working if
 
 - Several implementers are running at once whenever the graph allows, not one after another.
+- Configured execution choices resolve before a branch is created, and each dispatch records its requested model and effort.
 - A ticket starts as soon as its last blocker lands on the integration branch, not when the whole run ends.
 - Every ticket's trace shows `tdd` running, with a failing test before the code.
 - Merges into the integration branch are fast-forwards, not conflict resolutions.
