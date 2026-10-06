@@ -172,6 +172,13 @@ plugin marketplace config at this repo. Re-run `/setup-matt-pocock-skills` after
 updating so `docs/agents/issue-tracker.md` is regenerated from the fixed
 template.
 
+## Third-party skills
+
+`skills/forks/` carries skills from other repos (currently
+[caveman](https://github.com/JuliusBrussee/caveman) and
+[unlazy](https://github.com/Leonxlnx/unlazy)), synced against their upstreams
+by `scripts/sync-forks.sh`. See [skills/forks/README.md](./skills/forks/README.md).
+
 ## Upstreaming
 
 The doc change is small and self-contained and would suit a PR to
