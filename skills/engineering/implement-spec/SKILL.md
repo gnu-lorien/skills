@@ -20,7 +20,7 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 1. Read the spec and tickets to understand the task graph. Follow [Dispatch](references/dispatch.md) to resolve every ticket's execution profile or explicit model/effort overrides and the review-fix profile. For configured dispatch, run its harmless runtime probes and require the helper's `preflight` command to pass with current-session evidence before creating a branch. Missing observed model or effort blocks this check.
 
-2. (optional) Use an **exploration subagent** to conduct any exploration required by the tickets - relevant codebase files or external documentation. Ensure the exploration subagent can save files - it should save its markdown notes in a directory outside the repo, accessible by all future subagents. This lets **implementer subagents** focus on implementation rather than exploration.
+2. (optional) Use an **exploration subagent** to conduct any exploration required by the tickets - relevant codebase files or external documentation. Ensure the exploration subagent can save files. Save exploration notes in a dedicated task subdirectory under the operating system's official temporary directory, accessible to all subsequent subagents. Keep them until implementation and review are complete, then clean up only the files created for this task. This lets **implementer subagents** focus on implementation rather than exploration.
 
 3. Create the integration branch. If the issue tracker closes work through PRs, or the user asks for one, open a draft PR after the first merge in step 5 (a branch with no commits ahead of main can't open one), marked as closing the spec and tickets.
 

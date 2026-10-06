@@ -35,6 +35,10 @@ Implementers talk to the orchestrator through [context pointers](https://www.aih
 
 ## Common questions
 
+**Where do shared exploration notes live?**
+
+In a dedicated task subdirectory under the operating system's official temporary directory, accessible to subsequent subagents. They stay available through implementation and review, then the agent cleans up only the files it created for that task.
+
 **How do existing tickets get the execution profiles this skill reads?**
 
 Run [assign-models](https://aihero.dev/skills-assign-models) on the tickets or their [wayfinder](https://aihero.dev/skills-wayfinder) map. It assigns project profiles with a blast-radius rationale and matching metadata. [to-tickets](https://aihero.dev/skills-to-tickets) assigns profiles when creating new implementation tickets. Both validate configuration; this skill checks live dispatch through preflight before starting implementation.
