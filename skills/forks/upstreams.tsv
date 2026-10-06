@@ -1,0 +1,17 @@
+# Third-party skills tracked in skills/forks/. Maintained by scripts/sync-forks.sh.
+# Columns (tab-separated): name  remote  url  ref  upstream-path  synced-commit
+# Add a row with synced-commit "-" to import a new skill on the next sync.
+caveman	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman	-
+ultracave	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/ultracave	-
+megacave	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/megacave	-
+caveman-help	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman-help	-
+caveman-commit	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman-commit	-
+caveman-review	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman-review	-
+caveman-compress	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman-compress	-
+investigate-first	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/investigate-first	-
+lean-build	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/lean-build	-
+migration	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/migration	-
+safe-refactor	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/safe-refactor	-
+surgical-patch	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/surgical-patch	-
+verify-and-stop	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/verify-and-stop	-
+unlazy	unlazy	https://github.com/Leonxlnx/unlazy.git	main	.	-
