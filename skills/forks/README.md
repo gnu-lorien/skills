@@ -8,7 +8,7 @@ From [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) (Apache-2
 - **[ultracave](./ultracave/SKILL.md)**: Caveman at maximum compression: fragments, each fact once. User-invoked.
 - **[megacave](./megacave/SKILL.md)**: Caveman in Classical Chinese (文言文 register), technical terms verbatim. User-invoked.
 - **[caveman-help](./caveman-help/SKILL.md)**: Quick-reference card for the caveman skills and their commands.
-- **[caveman-commit](./caveman-commit/SKILL.md)**: Conventional Commits message compressed to intent only.
+- **[caveman-commit](./caveman-commit/SKILL.md)**: Conventional Commits message compressed to intent only. User-invoked.
 - **[caveman-review](./caveman-review/SKILL.md)**: Compressed code review, one line per finding with location, problem and fix.
 - **[caveman-compress](./caveman-compress/SKILL.md)**: Compress a memory file such as `CLAUDE.md` into caveman format, keeping a readable backup out of tree.
 - **[investigate-first](./investigate-first/SKILL.md)**: Diagnose ambiguous failures with evidence-ranked hypotheses before editing.
@@ -32,4 +32,7 @@ Only skill folders come across. Caveman's hooks, statusline, runtime and the Nat
 
 ## Local divergences
 
-Every intentional difference from upstream is listed here, so a sync conflict can be resolved in its favour. None yet: every folder above is a pristine upstream copy.
+Every intentional difference from upstream is listed here, so a sync conflict can be resolved in its favour. Folders not listed are pristine upstream copies.
+
+- **caveman-commit is user-invoked.** Upstream is model-invoked on "commit message", "write a commit" and `/commit`, so it took over ordinary commits. Locally its frontmatter adds `disable-model-invocation: true` and a local `agents/openai.yaml` sets `policy.allow_implicit_invocation: false`. The upstream description is left as is.
+- **caveman-commit commits when the task does.** Upstream's Boundaries section says it only generates the message and never runs `git commit`, so an agent that reached for it mid-task stopped at a pasted message and never committed. Locally, Boundaries says the message is used for the commit whenever the task includes committing, and is output for pasting only when a message alone was asked for.
