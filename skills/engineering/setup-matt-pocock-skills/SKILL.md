@@ -62,7 +62,7 @@ The defaults are the five canonical roles, each label string equal to its name: 
 
 Offer **multi-context** (a root `GLOSSARY-MAP.md` pointing to per-context `GLOSSARY.md` files) only when exploration found monorepo signals. Then confirm which layout they want.
 
-**Section D: Execution profiles.** When `implement-spec` is installed or the user requests model dispatch, propose profiles for the harnesses they use (Claude Code, Codex, or both). Read that skill's `references/dispatch.md` and `references/execution.example.json`. Verify proposed model/effort support against the installed clients and account; examples are not a live model catalog. Let the user choose family aliases or exact IDs and a review-fix profile. Preserve existing explicit choices and custom agents. If the skill is missing, report that supporting-agent generation requires it. Otherwise skip this section when dispatch is not needed.
+**Section D: Execution profiles.** When `implement-spec` or `assign-models` is installed, or the user requests model dispatch, propose profiles for the harnesses they use (Claude Code, Codex, or both). Read the installed `implement-spec` skill's `references/dispatch.md` and `references/execution.example.json`. Verify proposed model/effort support against the installed clients and account; examples are not a live model catalog. Let the user choose family aliases or exact IDs, a review-fix profile, and optional `profile_guidance` describing each profile's intended blast radius or decision risk. Preserve existing explicit choices and custom agents. If `implement-spec` is missing, report that resolver and supporting-agent resources require it. Otherwise skip this section when dispatch is not needed.
 
 ### 3. Confirm and edit
 

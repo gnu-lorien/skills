@@ -103,6 +103,19 @@ class DispatchTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 load_config(path)
 
+    def test_profile_guidance_is_optional_and_references_known_profiles(self):
+        with tempfile.TemporaryDirectory(prefix="skill-dispatch-") as directory:
+            path = Path(directory) / "execution.json"
+            config = copy.deepcopy(self.config)
+            del config["profile_guidance"]
+            path.write_text(json.dumps(config), encoding="utf-8")
+            self.assertEqual(resolve(load_config(path), "codex")["profile"], "standard")
+            for guidance in ({"missing": "Broad changes"}, {"standard": ""}, []):
+                config["profile_guidance"] = guidance
+                path.write_text(json.dumps(config), encoding="utf-8")
+                with self.subTest(guidance=guidance), self.assertRaises(ValueError):
+                    load_config(path)
+
     def probe_evidence(self, harness="codex", mode="native"):
         evidence = preflight_plan(self.config, harness, [{"labels": []}], "run-1", "test-host/1")
         for probe in evidence["probes"]:

@@ -35,6 +35,10 @@ Implementers talk to the orchestrator through [context pointers](https://www.aih
 
 ## Common questions
 
+**How do existing tickets get the execution profiles this skill reads?**
+
+Run [assign-models](https://aihero.dev/skills-assign-models) on the tickets or their [wayfinder](https://aihero.dev/skills-wayfinder) map. It assigns project profiles with a blast-radius rationale and matching metadata. [to-tickets](https://aihero.dev/skills-to-tickets) assigns profiles when creating new implementation tickets. Both validate configuration; this skill checks live dispatch through preflight before starting implementation.
+
 **Can I choose models and effort levels in both Claude Code and Codex?**
 
 Yes. Project execution profiles map the same ticket choice to a model and effort in each harness. [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) records these in `docs/agents/execution.json` and generates native agents plus one shared implementer contract. A ticket can use `execution:standard`, for example, while each harness uses its own configured model. Existing `model:*` and `effort:*` choices remain explicit overrides. Exact IDs stay exact; family aliases allow family selection. Unsupported choices are resolved before work starts, and review or gate fixes use a configured review-fix profile. Runtime observations are reported separately from requested settings; missing metadata is marked unknown.

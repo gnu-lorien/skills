@@ -54,6 +54,12 @@ def load_config(path):
     for key in ("default_profile", "review_fix_profile"):
         if config[key] not in config["profiles"]:
             raise ValueError(f"unknown {key}: {config[key]}")
+    guidance = config.get("profile_guidance", {})
+    if not isinstance(guidance, dict):
+        raise ValueError("profile_guidance must be a profile-to-purpose mapping")
+    for name, purpose in guidance.items():
+        if name not in config["profiles"] or not isinstance(purpose, str) or not purpose.strip():
+            raise ValueError(f"invalid guidance for profile: {name}")
     return config
 
 

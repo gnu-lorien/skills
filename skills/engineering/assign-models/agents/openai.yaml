@@ -1,0 +1,5 @@
+interface:
+  display_name: "Assign Models"
+  short_description: "Assign ticket execution profiles for Claude or Codex"
+policy:
+  allow_implicit_invocation: false

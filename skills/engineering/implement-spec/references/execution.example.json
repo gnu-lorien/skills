@@ -2,6 +2,10 @@
   "version": 1,
   "default_profile": "standard",
   "review_fix_profile": "difficult",
+  "profile_guidance": {
+    "standard": "Contained, reversible work with established interfaces and good verification, including narrow wiring or content changes.",
+    "difficult": "Shared contracts, hard-to-reverse decisions, cross-cutting design, or uncertain diagnoses that gate dependent work."
+  },
   "models": {
     "claude-code": {
       "sonnet": {"efforts": ["low", "medium", "high", "xhigh"], "aliases": ["sonnet-5"]},

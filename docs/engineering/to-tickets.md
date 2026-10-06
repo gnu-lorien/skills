@@ -55,6 +55,10 @@ Where even the batches can't stay green alone, they share an integration branch 
 
 ## Common questions
 
+**What if I already have tickets and only need to assign their execution choices?**
+
+Use [assign-models](https://aihero.dev/skills-assign-models) with the existing ticket references or a [wayfinder](https://aihero.dev/skills-wayfinder) map. It reads the work, assigns profiles by blast radius and project guidance, and preserves existing explicit choices unless you request reassignment. `to-tickets` does that assignment as part of drafting new tickets instead.
+
 **How do tickets select a model when I use both Claude Code and Codex?**
 
 When the project has execution profiles, the breakdown includes a proposed profile per ticket for you to approve. Published tickets carry an Execution section and matching `execution:<profile>` labels where supported. Each harness uses its own model and effort for that profile. Explicit model/effort choices remain overrides, and provider-specific overrides are flagged when another configured harness cannot run them. Without execution configuration, ticket formatting stays as before. [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) configures profiles; [implement-spec](https://aihero.dev/skills-implement-spec) resolves them before dispatch.

@@ -48,6 +48,10 @@ People often get two of these wrong, which is why the router gives the order and
 
 ## Common questions
 
+**Which skill assigns models to tickets I already have?**
+
+[assign-models](https://aihero.dev/skills-assign-models) assigns execution profiles or explicit overrides to named tickets or the open children of a [wayfinder](https://aihero.dev/skills-wayfinder) map, using blast radius and project guidance. [to-tickets](https://aihero.dev/skills-to-tickets) assigns profiles during creation instead. Assignment validates configuration; [implement-spec](https://aihero.dev/skills-implement-spec) checks live dispatch before implementation.
+
 **Who checks live model availability?**
 
 [implement-spec](https://aihero.dev/skills-implement-spec)'s coordinator probes the required model/effort combinations in the active harness before creating a branch, then runs the evidence checker. [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) checks the default and review-fix profiles after generation. Each harness is verified in its own client; missing runtime settings leave verification pending.

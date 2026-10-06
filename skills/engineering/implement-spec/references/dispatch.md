@@ -8,6 +8,8 @@ Use `execution.example.json` as a starting point, not an availability guarantee.
 
 Each profile maps harness names to a model and effort. `default_profile` applies to tickets without a profile; `review_fix_profile` applies to review and integration-gate fixes. Model keys may be family aliases or full IDs. Full IDs request that exact model; family aliases permit the family's runtime resolution. `aliases` explicitly maps legacy ticket spellings to a configured key. Map a versioned label to a family alias only when the user accepts family selection; otherwise configure the exact full ID.
 
+Optional `profile_guidance` maps profile names to their intended use, based on blast radius or other project criteria. `to-tickets` uses it for new tickets; the user-invoked `assign-models` skill uses it for existing tickets and maps. Guidance describes purpose, not a cross-provider strength ranking. Assignment validates configuration but does not establish runtime access; preflight below does that for configured dispatch.
+
 Tickets carry `execution:<profile>` labels on a real tracker and `## Execution` with `Profile: <profile>` in their bodies (a local ticket uses the same section). Existing `model:*` and `effort:*` labels remain explicit overrides. If body and labels disagree, or multiple values exist for a field, resolve the conflict with the user before creating a branch. Preserve an explicitly requested provider; never translate a Claude model to GPT or vice versa.
 
 Use Python 3.11 or newer to run the helper from this skill's `scripts/dispatch.py`:

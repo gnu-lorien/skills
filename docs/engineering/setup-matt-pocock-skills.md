@@ -36,7 +36,7 @@ It starts each section with the recommended answer, and skips any question its e
 | **Issue tracker** | the one matching your `git remote` | always, because this is the one real choice |
 | **Triage labels** | keep the five canonical names (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`) | only if the `triage` skill is installed |
 | **Domain docs** | single-context: one `GLOSSARY.md` plus `docs/adr/` at the root | only if it spots monorepo signals, and then it offers a multi-context `GLOSSARY-MAP.md` |
-| **Execution profiles** | project choices for models, efforts, and the review-fix profile | when `implement-spec` is installed or model dispatch is requested |
+| **Execution profiles** | project choices for models, efforts, the review-fix profile, and optional assignment guidance | when `implement-spec` or `assign-models` is installed, or model dispatch is requested |
 
 The tracker options:
 
@@ -52,6 +52,10 @@ The first three ship as templates in the skill and work out of the box. Local ma
 "Other" is a full option too. It is how Jira, Linear, Azure DevOps and Beads all work. You describe the workflow, the skill records your prose in `docs/agents/issue-tracker.md`, and the downstream skills follow the prose. Users have already built this: a Jira-over-[MCP](https://www.aihero.dev/ai-coding-dictionary/mcp) variant, a Gitea CLI shaped like `gh`, a hand-built local dashboard.
 
 ## Common questions
+
+**Where do I define which profile a ticket should use?**
+
+Optional `profile_guidance` in `docs/agents/execution.json` describes the purpose of each profile, such as contained wiring or decisions with a wider blast radius. [assign-models](https://aihero.dev/skills-assign-models) applies that guidance to existing tickets; [to-tickets](https://aihero.dev/skills-to-tickets) uses it while creating new ones. The profile's model and effort mapping stays separate for Claude Code and Codex, and live availability is still checked by preflight.
 
 **Does installing the skill also install its Claude Code and Codex agents?**
 
