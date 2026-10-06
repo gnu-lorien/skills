@@ -1,17 +1,17 @@
 # Third-party skills tracked in skills/forks/. Maintained by scripts/sync-forks.sh.
 # Columns (tab-separated): name  remote  url  ref  upstream-path  synced-commit
 # Add a row with synced-commit "-" to import a new skill on the next sync.
-caveman	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman	-
-ultracave	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/ultracave	-
-megacave	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/megacave	-
-caveman-help	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman-help	-
-caveman-commit	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman-commit	-
-caveman-review	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman-review	-
-caveman-compress	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman-compress	-
-investigate-first	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/investigate-first	-
-lean-build	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/lean-build	-
-migration	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/migration	-
-safe-refactor	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/safe-refactor	-
-surgical-patch	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/surgical-patch	-
-verify-and-stop	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/verify-and-stop	-
-unlazy	unlazy	https://github.com/Leonxlnx/unlazy.git	main	.	-
+caveman	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman	6571943370f7c9d4de1946481177ee7b306cd8e8
+ultracave	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/ultracave	6571943370f7c9d4de1946481177ee7b306cd8e8
+megacave	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/megacave	6571943370f7c9d4de1946481177ee7b306cd8e8
+caveman-help	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman-help	6571943370f7c9d4de1946481177ee7b306cd8e8
+caveman-commit	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman-commit	6571943370f7c9d4de1946481177ee7b306cd8e8
+caveman-review	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman-review	6571943370f7c9d4de1946481177ee7b306cd8e8
+caveman-compress	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/caveman-compress	6571943370f7c9d4de1946481177ee7b306cd8e8
+investigate-first	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/investigate-first	6571943370f7c9d4de1946481177ee7b306cd8e8
+lean-build	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/lean-build	6571943370f7c9d4de1946481177ee7b306cd8e8
+migration	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/migration	6571943370f7c9d4de1946481177ee7b306cd8e8
+safe-refactor	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/safe-refactor	6571943370f7c9d4de1946481177ee7b306cd8e8
+surgical-patch	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/surgical-patch	6571943370f7c9d4de1946481177ee7b306cd8e8
+verify-and-stop	caveman	https://github.com/JuliusBrussee/caveman.git	main	skills/verify-and-stop	6571943370f7c9d4de1946481177ee7b306cd8e8
+unlazy	unlazy	https://github.com/Leonxlnx/unlazy.git	main	.	16671491f6679ad9378f52604d3bc2415b4120c7
