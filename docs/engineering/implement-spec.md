@@ -1,6 +1,6 @@
 ## What it does
 
-`implement-spec` takes a [spec](https://www.aihero.dev/ai-coding-dictionary/spec) and its [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket) and lands the whole thing in one run. The orchestrating [agent](https://www.aihero.dev/ai-coding-dictionary/agent) hands each ticket to an implementer [subagent](https://www.aihero.dev/ai-coding-dictionary/subagent) working in its own git worktree, merges each finished branch into a single **integration branch**, runs [code-review](https://aihero.dev/skills-code-review) over the result, and checks the full suite before resolving the tickets.
+`implement-spec` takes a [spec](https://www.aihero.dev/ai-coding-dictionary/spec) and its [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket) and lands the whole thing in one run. The orchestrating [agent](https://www.aihero.dev/ai-coding-dictionary/agent) hands each ticket to an implementer [subagent](https://www.aihero.dev/ai-coding-dictionary/subagent) working in its own git worktree, merges each finished branch into a single **integration branch**, runs [code-review](https://aihero.dev/skills-code-review) once over the result, turns its findings into tickets, and checks the full suite before resolving the tickets.
 
 It reads the tickets as a **task graph**, not a list. Blocking edges decide what can start, so at any moment there is a **frontier** of tickets whose blockers have all landed, and every ticket on the frontier runs at once. That is the difference from working the tickets one by one. The graph's shape sets the pace, not the tickets' order on the tracker.
 
@@ -19,7 +19,7 @@ You invoke this by typing `/implement-spec`, and the agent won't reach for it on
 
 - **An issue tracker.** The skill reads the tickets from, and resolves them on, the tracker [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) configured. If none has been configured, it stops and tells you to run that first rather than guessing.
 - **Tickets with blocking edges**, as [to-tickets](https://aihero.dev/skills-to-tickets) writes them. Without edges the graph is flat and every ticket starts at once.
-- **A [harness](https://www.aihero.dev/ai-coding-dictionary/harness) that runs subagents in the background and gives each one a git worktree.** The skill exists to run tickets at the same time, so on a harness that runs subagents one at a time, it is only a slower `implement`.
+- **A [harness](https://www.aihero.dev/ai-coding-dictionary/harness) that runs subagents in parallel and gives each one a git worktree.** The skill exists to run tickets at the same time, so on a harness that runs subagents one at a time, it is only a slower `implement`.
 
 ## The integration branch
 
@@ -60,7 +60,7 @@ The coordinator launches a no-edit probe for each model/effort combination neede
 
 **Does every implementer run the full test suite?**
 
-Each implementer runs typecheck where available and the test files it creates or edits. If a ticket requires broader testing before dependent tickets can start, it runs that too. A merger checks types on the combined branch before unblocking dependents. The full suite runs at the **integration gate**, after every ticket and review fix has landed, because that is the result you will ship. A ticket's full-suite criterion stays deferred until that gate passes. A failure gets focused fixes followed by another full-suite run; a blocked check or skipped required test keeps completion pending.
+No. During a red-green slice an implementer runs only the test it is writing; before reporting, it runs typecheck where available and each test file it created or edited, once. If a ticket names broader tests, it runs those too. A merger checks types on the combined branch before unblocking dependents. The full suite runs once, at the **integration gate**, after every ticket and the review's fix tickets have landed, because that is the result you will ship. A ticket's full-suite criterion stays deferred until that gate passes. Each gate failure becomes a fix ticket on the frontier, followed by another full-suite run; a blocked check or skipped required test keeps completion pending.
 
 **How is this different from running `/implement` on each ticket myself?**
 
@@ -72,7 +72,13 @@ No, not any more. One user who liked the in-progress version had exactly this co
 
 **Its review and fix loop ran for hours, or kept "fixing" tickets that hadn't been built yet.**
 
-Both happen when `code-review` runs anywhere other than the one point the skill gives it. It compares the code against the whole spec, so it only makes sense once every ticket has landed. If it runs mid-run, every unbuilt ticket reads as a failure. The agent then builds that ticket, and that triggers another review. At the end, the skill runs `code-review` once and sends every finding to one fix subagent, but it doesn't yet say when to stop after that fix. One user reported a five-ticket feature where "the review and fix loop took roughly four hours". If you see a second broad review start, tell it to run focused checks for the fixed findings and stop. Expect that first review to find real problems. The run's output is a draft that the review completes, not something to ship on its own.
+Both came from running `code-review` outside the graph. One user reported a five-ticket feature where "the review and fix loop took roughly four hours". Another run sent two dozen findings, most of them refactoring smells, to a single fix subagent that worked for hours with nothing to report until it finished.
+
+The review is now a ticket of its own, blocked by every other ticket, so it runs only once everything has landed. The orchestrator sends each finding to exactly one place by the class and reach `code-review` tags it with: defects, spec gaps, false comments and standard breaches in new code become fix tickets on the frontier; smells and changes to code the spec didn't ask to touch become follow-up tickets outside the spec; scope creep goes in the PR body for you to decide. Closing the Review ticket records that the review ran, so a spec gets one review, and nothing after it (fix tickets, gate failures, a later session) opens another. Expect that review to find real problems. The run's output is a draft that the review completes, not something to ship on its own.
+
+**An implementer went quiet for hours.**
+
+A subagent reports only when it finishes, so a long task is a long silence. Small tickets keep each silence short, and the implementer contract tells it to stop and report when a test still fails after two fix attempts, a single command runs past 15 minutes, or the fix needs a change outside its ticket. Some hosts also end background subagents when you send a message; there, the orchestrator dispatches the frontier in the foreground, all in one message, and checks the worktrees before telling you what earlier work did.
 
 **Does it drive tdd like implement does?**
 
@@ -101,7 +107,8 @@ A worktree holds only what git tracks. Tests that read gitignored fixtures, loca
 - A ticket starts as soon as its last blocker lands on the integration branch, not when the whole run ends.
 - Every ticket's trace shows `tdd` running, with a failing test before the code.
 - Merges into the integration branch are fast-forwards, not conflict resolutions.
-- The full suite passes on the combined integration branch after review fixes, before the PR becomes ready or the run closes tickets.
+- The review runs once: its ticket closes with a comment naming every finding's destination, and only fix tickets join the PR.
+- The full suite runs once on the combined integration branch, after the review's fix tickets, before the PR becomes ready or the run closes tickets.
 - The run ends on one branch with every ticket resolved, and a PR only if your tracker wanted one.
 
 ## Where it fits

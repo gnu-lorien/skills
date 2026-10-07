@@ -14,11 +14,13 @@ The tickets are not a list of steps. They are a **task graph** with blocking rel
 
 Communication to and from subagents should be sparse. Communicate primarily through **context pointers**: to the spec, tickets, research notes, and previous commits. Don't duplicate information already available via pointers.
 
-**Implementer subagents** should be run serially in the background. Use **minimum concurrency**: run at most one **implementer subagent** at a time.
+All implementation work is a ticket on the frontier, including the review and every fix after it, so each one has acceptance criteria, a merge point and a report.
+
+**Implementer subagents** should be run serially. Use **minimum concurrency**: run at most one **implementer subagent** at a time. Run it in the background only where background agents survive the user's next message.
 
 ## Steps
 
-1. Read the spec and tickets to understand the task graph.
+1. Read the spec and tickets to understand the task graph. If the graph has no **Review ticket**, add one through the issue tracker: a ticket under the spec, blocked by every other ticket, that you work yourself in step 7.
 
 2. (optional) Use an **exploration subagent** to conduct any exploration required by the tickets - relevant codebase files or external documentation. Ensure the exploration subagent can save files. Save exploration notes in a dedicated task subdirectory under the operating system's official temporary directory, accessible to all subsequent subagents. Keep them until implementation and review are complete, then clean up only the files created for this task. This lets **implementer subagents** focus on implementation rather than exploration.
 
@@ -33,8 +35,14 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 6. If this changes the **frontier** of available tickets, ensure they will be considered for the next **implementer subagent**. Kick off the next one only after the previous one's work is merged.
 
-7. Once all tickets are complete, call the Skill tool with `code-review` on the integration branch. Fix all issues raised by the code review in a single **implementer subagent**.
+7. When the **Review ticket** reaches the frontier, work it yourself: call the Skill tool with `code-review` on the integration branch, then send every finding to exactly one destination by its class and reach:
+   - **Fix ticket**, under the spec, joining the frontier: `defect`, `spec-gap`, `comment`, and `standard` with reach `new`. Slice them like any ticket: one coherent change each, with acceptance criteria naming the tests that verify it. Batch the `comment` findings into one ticket.
+   - **Follow-up ticket**, outside the spec, blocking nothing, left open by the PR: `smell`, `standard` with reach `existing`, and any change to code the spec didn't ask to change. Group them by area.
+   - **The PR body**: `scope`, for the human reviewer to decide.
+   - **Dropped**: a finding you judge wrong, with the reason.
 
-8. If a draft PR exists, mark it ready for review. Otherwise, resolve each ticket the way the issue tracker closes work, and report the integration branch.
+   Close the Review ticket with a comment naming the reviewed commit and every finding's destination. The closed Review ticket is the record that the review ran: **a spec gets one review**. Fix tickets and later sessions go through the frontier, and none of them opens another review.
+
+8. If a draft PR exists, add the fix tickets to its closing references and mark it ready for review. Otherwise, resolve each ticket the way the issue tracker closes work, and report the integration branch.
 
 9. Clean up all **implementer subagent** worktrees.

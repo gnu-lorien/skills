@@ -64,19 +64,24 @@ When `graphify-out/graph.json` exists, use graphify to inspect structural change
 
 ### 5. Spawn both sub-agents in parallel
 
+Both prompts carry the **finding tags** below, pasted in full, so every finding arrives with one class and one reach and a caller can route it without re-reading the hunk:
+
+- **Class**: `defect` (wrong behaviour), `spec-gap` (a requirement missing, partial, or implemented wrongly), `scope` (behaviour the spec didn't ask for), `comment` (a comment or doc that states something false), `standard` (a documented-standard breach), `smell` (a baseline smell).
+- **Reach**: `new` when the diff adds the code, `existing` when the diff only touches or moves it.
+
 **Standards sub-agent prompt** should include:
 
 - The full diff command and commit list.
 - The list of standards-source files you found in step 3, **plus the smell baseline from step 3** pasted in full (the sub-agent has no other access to it).
 - Graphify context: note if graphify showed newly introduced symbols lacking callers (speculative generality / dead code).
-- The brief: "Report, per file/hunk where relevant, (a) every place the diff violates a documented standard: cite the standard (file + the rule); and (b) any baseline smell you spot: name it and quote the hunk. Distinguish hard violations from judgement calls: documented-standard breaches can be hard, but baseline smells are always judgement calls, and a documented repo standard overrides the baseline. Skip anything tooling enforces. Under 400 words."
+- The brief: "Report, per file/hunk where relevant, (a) every place the diff violates a documented standard: cite the standard (file + the rule); and (b) any baseline smell you spot: name it and quote the hunk. Distinguish hard violations from judgement calls: documented-standard breaches can be hard, but baseline smells are always judgement calls, and a documented repo standard overrides the baseline. Skip anything tooling enforces. Tag every finding with its class and reach. Under 400 words."
 
 **Spec sub-agent prompt** should include:
 
 - The diff command and commit list.
 - The path or fetched contents of the spec.
 - Graphify context: note whether graphify confirmed or failed to find directed paths connecting new mechanisms to production entry points.
-- The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong. Quote the spec line for each finding. Under 400 words."
+- The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong. Quote the spec line for each finding. Tag every finding with its class and reach. Under 400 words."
 
 If the spec is missing, skip the Spec sub-agent and note this in the final report.
 
